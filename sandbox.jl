@@ -17,6 +17,7 @@ fn = "images/k26_v1_176um_target_pursuit_002_013.h5"
 fn = "images/M_FLUO.h5"
 fn = "images/demoMovie.h5"
 fn = "demoMovie_mc.h5"
+fn = "demoMovie.tif"
 
 function load_movie(fn, signed=false)
   println(fn)
@@ -43,7 +44,7 @@ function view_movie(mov)
 end
 
 function save_movie(fn, mov)
-  assert(typeof(mov) == Array{Float64,3})
+  # assert(typeof(mov) == Array{Float64,3})
   f = h5open(fn, "w")
   @time f["mov", "chunk", (32,32,1)] = mov
   close(f)
@@ -70,9 +71,17 @@ function align(mov)
   return align_stack(mov, template, params)
 end
 
-function generate_template(mov, n=20)
+function generate_random_template(mov, n=4)
   indices = randperm(size(mov,3))[1:n]
   sample = mov[:,:,indices]
+  sample_template = median3d(sample)
+  params = create_params(16, 8, 8, 0)
+  template, offsets, matches = align_stack(sample, sample_template, params)
+  return template[:,:,1]
+end
+
+function generate_template(mov, n=4)
+  sample = mov[:,:,1:n:end]
   sample_template = median3d(sample)
   params = create_params(16, 8, 8, 0)
   template, offsets, matches = align_stack(sample, sample_template, params)
