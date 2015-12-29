@@ -12,5 +12,6 @@ template = median3d(sample)
 
 p = 10
 k = 1
-frame = mov[p:end-p,p:end-p,k]
-blockmatches, max_r, xc = get_max_xc_vector(frame, template)
+temp = template[p+1:end-p,p+1:end-p,k]
+frame = mov[:,:,k]
+blockmatches, max_r, xc = ImageRegistration.get_max_xc_vector(temp, frame)

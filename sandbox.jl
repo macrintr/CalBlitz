@@ -19,6 +19,10 @@ fn = "images/demoMovie.h5"
 fn = "demoMovie_mc.h5"
 fn = "demoMovie.tif"
 
+function gray16_to_int16(a)
+  return round(Int16, convert(Array{Float64}, data(a))*2^16)
+end
+
 function load_movie(fn, signed=false)
   println(fn)
 	if fn[end-1:end] == "h5"
