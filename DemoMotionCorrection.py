@@ -11,6 +11,7 @@ import calblitz as cb
 import time
 import pylab as pl
 import numpy as np
+from time import time
 #% set basic ipython functionalities
 try: 
     pl.ion()
@@ -51,8 +52,11 @@ m.save(filename_hdf5)
 max_shift_h=10;
 max_shift_w=10;
 m=cb.load(filename_hdf5); 
-m,shifts,xcorrs,template=m.motion_correct(max_shift_w=max_shift_w,max_shift_h=max_shift_h, num_frames_template=None, template = None,method='opencv')
-#m,shifts,xcorrs,template=m.motion_correct(max_shift_w=max_shift_w,max_shift_h=max_shift_h, num_frames_template=None, template = None,method='skimage')
+t1 = time()
+# m,shifts,xcorrs,template=m.motion_correct(max_shift_w=max_shift_w,max_shift_h=max_shift_h, num_frames_template=300, template = None,method='opencv')
+m,shifts,xcorrs,template=m.motion_correct(max_shift_w=max_shift_w,max_shift_h=max_shift_h, num_frames_template=300, template = None,method='skimage')
+t2 = time()
+print('python motion_correct:  %0.3fs' % (t2 - t1))
 
 
 max_h,max_w= np.max(shifts,axis=0)

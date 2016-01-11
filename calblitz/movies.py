@@ -179,37 +179,37 @@ class movie(ts.timeseries):
              else:
                  raise Exception('Unknown motion correction ethod!')
              avg_corr=np.mean(res);
-             sh_y,sh_x = top_left
+             sh_y_n,sh_x_n = top_left
              bottom_right = (top_left[0] + w, top_left[1] + h)
         
-             if (0 < top_left[1] < 2 * ms_h-1) & (0 < top_left[0] < 2 * ms_w-1):
-                 # if max is internal, check for subpixel shift using gaussian
-                 # peak registration
-                 log_xm1_y = np.log(res[sh_x-1,sh_y]);             
-                 log_xp1_y = np.log(res[sh_x+1,sh_y]);             
-                 log_x_ym1 = np.log(res[sh_x,sh_y-1]);             
-                 log_x_yp1 = np.log(res[sh_x,sh_y+1]);             
-                 four_log_xy = 4*np.log(res[sh_x,sh_y]);
+#              if (0 < top_left[1] < 2 * ms_h-1) & (0 < top_left[0] < 2 * ms_w-1):
+#                  # if max is internal, check for subpixel shift using gaussian
+#                  # peak registration
+#                  log_xm1_y = np.log(res[sh_x-1,sh_y]);             
+#                  log_xp1_y = np.log(res[sh_x+1,sh_y]);             
+#                  log_x_ym1 = np.log(res[sh_x,sh_y-1]);             
+#                  log_x_yp1 = np.log(res[sh_x,sh_y+1]);             
+#                  four_log_xy = 4*np.log(res[sh_x,sh_y]);
     
-                 sh_x_n = -(sh_x - ms_h + (log_xm1_y - log_xp1_y) / (2 * log_xm1_y - four_log_xy + 2 * log_xp1_y))
-                 sh_y_n = -(sh_y - ms_w + (log_x_ym1 - log_x_yp1) / (2 * log_x_ym1 - four_log_xy + 2 * log_x_yp1))
-             else:
-                 sh_x_n = -(sh_x - ms_h)
-                 sh_y_n = -(sh_y - ms_w)
+#                  sh_x_n = -(sh_x - ms_h + (log_xm1_y - log_xp1_y) / (2 * log_xm1_y - four_log_xy + 2 * log_xp1_y))
+#                  sh_y_n = -(sh_y - ms_w + (log_x_ym1 - log_x_yp1) / (2 * log_x_ym1 - four_log_xy + 2 * log_x_yp1))
+#              else:
+#                  sh_x_n = -(sh_x - ms_h)
+#                  sh_y_n = -(sh_y - ms_w)
             
-#             if not only_shifts:
-#                 if method == 'opencv':        
-#                     M = np.float32([[1,0,sh_y_n],[0,1,sh_x_n]])
-#                     self[i] = cv2.warpAffine(frame,M,(w_i,h_i),flags=interpolation)
-#                 elif method == 'skimage':
-#                     tform = AffineTransform(translation=(-sh_y_n,-sh_x_n))             
-#                     self[i] = warp(frame, tform,preserve_range=True,order=3)
-#                 if show_movie:        
-#                 fr = cv2.resize(self[i],None,fx=2, fy=2, interpolation = cv2.INTER_CUBIC)
-#                 cv2.imshow('frame',fr/255.0)
-#                 if cv2.waitKey(1) & 0xFF == ord('q'):
-#                     cv2.destroyAllWindows()
-#                     break     
+# #             if not only_shifts:
+# #                 if method == 'opencv':        
+# #                     M = np.float32([[1,0,sh_y_n],[0,1,sh_x_n]])
+# #                     self[i] = cv2.warpAffine(frame,M,(w_i,h_i),flags=interpolation)
+# #                 elif method == 'skimage':
+# #                     tform = AffineTransform(translation=(-sh_y_n,-sh_x_n))             
+# #                     self[i] = warp(frame, tform,preserve_range=True,order=3)
+# #                 if show_movie:        
+# #                 fr = cv2.resize(self[i],None,fx=2, fy=2, interpolation = cv2.INTER_CUBIC)
+# #                 cv2.imshow('frame',fr/255.0)
+# #                 if cv2.waitKey(1) & 0xFF == ord('q'):
+# #                     cv2.destroyAllWindows()
+# #                     break     
 
              shifts.append([sh_x_n,sh_y_n]) 
              xcorrs.append([avg_corr])
